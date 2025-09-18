@@ -11,5 +11,8 @@ public interface AccountRepository {
     List<Account> getAllAccounts(UUID userId);
     boolean withdraw(String accountId, BigDecimal amount);
     boolean desposit(String accountId, BigDecimal amount);
+    boolean closeAccount(String accountId, UUID ownerId);
+    Account findByAccountId(String accountId);
+
 
 }

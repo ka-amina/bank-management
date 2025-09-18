@@ -28,23 +28,49 @@ public class AccountService {
         return "BA-" + sb;
     }
 
-    public boolean createAccount(UUID ownerId){
+    public boolean createAccount(UUID ownerId) {
         String accountId = generateID();
-        Account account  = new Account(accountId, ownerId);
+        Account account = new Account(accountId, ownerId);
         accountRepository.createAccount(account);
         return true;
     }
 
-    public List<Account> getAllAccounts(UUID userId){
+    public List<Account> getAllAccounts(UUID userId) {
         return accountRepository.getAllAccounts(userId);
     }
 
-    public boolean withdraw(String accountId, BigDecimal amount){
+    public boolean withdraw(String accountId, BigDecimal amount) {
         return accountRepository.withdraw(accountId, amount);
     }
 
-    public boolean desposit(String accountId, BigDecimal amount){
+    public boolean desposit(String accountId, BigDecimal amount) {
         return accountRepository.desposit(accountId, amount);
+    }
+
+    public String closeAccount(String accountId, UUID ownerId) {
+        Account account = accountRepository.findByAccountId(accountId);
+
+        if (account == null) {
+            return "Account not found.";
+        }
+
+        if (!account.getUserId().equals(ownerId)) {
+            return "You can only close your own accounts.";
+        }
+
+        if (!account.getStatus()) {
+            return "Account is already closed.";
+        }
+
+        if (account.getBalance().compareTo(BigDecimal.ZERO) != 0) {
+            return "Account balance must be zero to close the account. Current balance: " + account.getBalance();
+        }
+
+        if (accountRepository.closeAccount(accountId, ownerId)) {
+            return "SUCCESS";
+        } else {
+            return "Failed to close account. Please try again.";
+        }
     }
 
 }

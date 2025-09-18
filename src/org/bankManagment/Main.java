@@ -93,6 +93,10 @@ public class Main {
                                     break;
                                 case 3:
                                     List<Account> dispositAccounts = accountService.getAllAccounts(authenticatedUser.getId());
+                                    if (dispositAccounts.isEmpty()) {
+                                        System.out.println("you dont have any account!");
+                                        break;
+                                    }
                                     System.out.println("------- list of your accounts----------");
                                     dispositAccounts.forEach(System.out::println);
 
@@ -106,13 +110,16 @@ public class Main {
                                         UUID owner = authenticatedUser.getId();
                                         transactionService.addDesposit(owner, despositAccountId, dispositAmount);
                                         System.out.println("You have successfully deposited your account.");
-                                    }else{
+                                    } else {
                                         System.out.println("something went wrong!");
                                     }
 
                                     break;
                                 case 4:
                                     List<Account> withdrawAccounts = accountService.getAllAccounts(authenticatedUser.getId());
+                                    if (withdrawAccounts.isEmpty()) {
+                                        System.out.println("you dont have any account!");
+                                    }
                                     System.out.println("------- list of your accounts----------");
                                     withdrawAccounts.forEach(System.out::println);
 
@@ -126,13 +133,13 @@ public class Main {
                                         UUID owner = authenticatedUser.getId();
                                         transactionService.addWithdraw(owner, accountId, amount);
                                         System.out.println("The amount has been withdrawn");
-                                    }else {
+                                    } else {
                                         System.out.println("Sorry something went wrong, please try again");
                                     }
                                     break;
                                 case 6:
                                     System.out.println("----------------Your Transactions history-----------------");
-                                    List<Transaction> transactions= transactionService.getAllTransactions(authenticatedUser.getId());
+                                    List<Transaction> transactions = transactionService.getAllTransactions(authenticatedUser.getId());
                                     transactions.forEach(System.out::println);
                                     break;
                                 case 7:
@@ -148,10 +155,41 @@ public class Main {
                                 case 8:
                                     System.out.println("Enter Your new password:");
                                     String newPassword = sc.nextLine();
-                                    if(auth.changePassword(newPassword)) {
+                                    if (auth.changePassword(newPassword)) {
                                         System.out.println("You have successfully changed your password!");
-                                    }else{
+                                    } else {
                                         System.out.println("Sorry something went wrong, please try again!");
+                                    }
+                                    break;
+                                case 9:
+                                    List<Account> userAccounts = accountService.getAllAccounts(authenticatedUser.getId());
+
+                                    if (userAccounts.isEmpty()) {
+                                        System.out.println("You don't have any accounts to close.");
+                                        break;
+                                    }
+
+                                    List<Account> activeAccounts = userAccounts.stream()
+                                            .filter(Account::getStatus)
+                                            .toList();
+
+                                    if (activeAccounts.isEmpty()) {
+                                        System.out.println("You don't have any active accounts to close.");
+                                        break;
+                                    }
+
+                                    System.out.println("------- Your Active Accounts ----------");
+                                    activeAccounts.forEach(System.out::println);
+
+                                    System.out.println("Enter the Account ID you want to close: ");
+                                    String accountIdToClose = sc.nextLine();
+
+                                    String closeResult = accountService.closeAccount(accountIdToClose, authenticatedUser.getId());
+
+                                    if ("SUCCESS".equals(closeResult)) {
+                                        System.out.println("Account has been successfully closed!");
+                                    } else {
+                                        System.out.println("Error: " + closeResult);
                                     }
                                     break;
                                 case 10:

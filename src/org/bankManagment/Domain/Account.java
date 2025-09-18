@@ -43,6 +43,9 @@ public class Account {
         this.balance = this.balance.subtract(amount);
     }
 
+    public void closeAccount() {
+        this.isActive = false;
+    }
 
     @Override
     public String toString() {

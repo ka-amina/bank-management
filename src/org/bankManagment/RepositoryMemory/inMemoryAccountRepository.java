@@ -34,8 +34,8 @@ public class inMemoryAccountRepository implements AccountRepository {
     }
 
     @Override
-    public boolean desposit(String accountId, BigDecimal amount){
-        Optional<Account> account = accounts.stream().filter(acc->acc.getAccountId().equals(accountId)).findFirst();
+    public boolean desposit(String accountId, BigDecimal amount) {
+        Optional<Account> account = accounts.stream().filter(acc -> acc.getAccountId().equals(accountId)).findFirst();
 
         if (account.isEmpty()) return false;
 
@@ -43,6 +43,42 @@ public class inMemoryAccountRepository implements AccountRepository {
 
         acc.disposit(amount);
         return true;
+    }
+
+    @Override
+    public boolean closeAccount(String accountId, UUID ownerId) {
+        Optional<Account> accountOpt = accounts.stream()
+                .filter(acc -> acc.getAccountId().equals(accountId))
+                .findFirst();
+
+        if (accountOpt.isEmpty()) {
+            return false;
+        }
+
+        Account account = accountOpt.get();
+
+        if (!account.getUserId().equals(ownerId)) {
+            return false;
+        }
+
+        if (!account.getStatus()) {
+            return false;
+        }
+
+        if (account.getBalance().compareTo(BigDecimal.ZERO) != 0) {
+            return false;
+        }
+
+        account.closeAccount();
+        return true;
+    }
+
+    @Override
+    public Account findByAccountId(String accountId) {
+        return accounts.stream()
+                .filter(acc -> acc.getAccountId().equals(accountId))
+                .findFirst()
+                .orElse(null);
     }
 
 }
