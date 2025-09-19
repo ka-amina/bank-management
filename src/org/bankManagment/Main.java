@@ -1,37 +1,51 @@
 package org.bankManagment;
 
 
+import org.bankManagment.RepositoryMemory.inMemoryUserRepository;
+import org.bankManagment.Service.AuthService;
+
 import java.util.Scanner;
 
 public class Main {
-    public static void main(){
+    public static void main() {
         Scanner sc = new Scanner(System.in);
+        AuthService auth = new AuthService(new inMemoryUserRepository());
 
         int choice;
-        do{
+        do {
             System.out.println("Welcome: ");
             System.out.println("1- Register");
             System.out.println("2- Login ");
             System.out.println("3- Exit ");
             System.out.println("enter your choice: ");
 
-            choice =sc.nextInt();
+            choice = sc.nextInt();
             sc.nextLine();
 
-            switch(choice){
+            switch (choice) {
                 case 1:
                     System.out.println("Enter your full name: ");
+                    System.out.println("Full name: ");
+                    String fullName = sc.nextLine();
                     System.out.println("Email: ");
+                    String email = sc.nextLine();
                     System.out.println("Password: ");
+                    String password = sc.nextLine();
                     System.out.println("confirm password: ");
+                    String confirmPassword = sc.nextLine();
+                    if (auth.register(fullName, email, password)&& confirmPassword.equals(password)) {
+                        System.out.println("You have successfully registered!");
+                    }else {
+                        System.out.println("Sorry email or password is incorrect!");
+                    }
                     break;
                 case 2:
                     System.out.println("email: ");
-                    String email = sc.nextLine();
+                    String loginEmail = sc.nextLine();
                     System.out.println("Password:");
-                    String password = sc.nextLine();
-                    if(email != null && password != null ){
-                        do{
+                    String loginPassword = sc.nextLine();
+                    if (loginEmail != null && loginPassword != null) {
+                        do {
                             System.out.println("1- Create account ");
                             System.out.println("2- List my accounts");
                             System.out.println("3- Deposit");
@@ -44,9 +58,9 @@ public class Main {
                             System.out.println("10- Logout");
                             System.out.println("11- Exit");
                             System.out.println("Enter your choice: ");
-                            choice= sc.nextInt();
+                            choice = sc.nextInt();
                             sc.nextLine();
-                        }while(choice != 11);
+                        } while (choice != 11);
                     }
                     break;
                 case 3:
@@ -57,6 +71,6 @@ public class Main {
                     System.out.println("Invalid choice");
                     break;
             }
-        }while (choice != 3);
+        } while (choice != 3);
     }
 }
