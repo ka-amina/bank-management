@@ -14,6 +14,7 @@ public class AuthService {
 
     public boolean register(String fullName, String email, String password) {
         if (password.length() < 8) return false;
+        if (userRepository.findByEmail(email).isPresent())return false;
 
         User user = new User(fullName, email, password);
         userRepository.createUser(user);
