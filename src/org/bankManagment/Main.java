@@ -1,6 +1,7 @@
 package org.bankManagment;
 
 
+import org.bankManagment.Domain.User;
 import org.bankManagment.RepositoryMemory.inMemoryUserRepository;
 import org.bankManagment.Service.AuthService;
 
@@ -10,6 +11,7 @@ public class Main {
     public static void main() {
         Scanner sc = new Scanner(System.in);
         AuthService auth = new AuthService(new inMemoryUserRepository());
+        User authenticatedUser= null;
 
         int choice;
         do {
@@ -44,7 +46,10 @@ public class Main {
                     String loginEmail = sc.nextLine();
                     System.out.println("Password:");
                     String loginPassword = sc.nextLine();
-                    if (loginEmail != null && loginPassword != null) {
+
+                    if (auth.login(loginEmail, loginPassword)) {
+                        authenticatedUser = auth.getLoggedUser();
+                        System.out.println("welcome"+authenticatedUser.getFullName());
                         do {
                             System.out.println("1- Create account ");
                             System.out.println("2- List my accounts");
@@ -61,6 +66,10 @@ public class Main {
                             choice = sc.nextInt();
                             sc.nextLine();
                         } while (choice != 11);
+                    }
+                    else {
+                        System.out.println("Sorry email or password is incorrect!");
+                        System.out.println("--------------------------------------------------");
                     }
                     break;
                 case 3:

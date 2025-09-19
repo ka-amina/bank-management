@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public class AuthService {
     private final UserRepository userRepository;
+    private User loggedUser;
 
     public AuthService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -19,5 +20,18 @@ public class AuthService {
         User user = new User(fullName, email, password);
         userRepository.createUser(user);
         return true;
+    }
+
+    public boolean login(String email, String password){
+        Optional<User> user =  userRepository.findByEmail(email);
+        if(user.isPresent() && user.get().getPassword().equals(password)){
+            loggedUser = user.get();
+            return true;
+        }
+        return false;
+    }
+
+    public User getLoggedUser(){
+        return loggedUser;
     }
 }
