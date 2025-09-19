@@ -11,7 +11,7 @@ public class Main {
     public static void main() {
         Scanner sc = new Scanner(System.in);
         AuthService auth = new AuthService(new inMemoryUserRepository());
-        User authenticatedUser= null;
+        User authenticatedUser = null;
 
         int choice;
         do {
@@ -35,9 +35,9 @@ public class Main {
                     String password = sc.nextLine();
                     System.out.println("confirm password: ");
                     String confirmPassword = sc.nextLine();
-                    if (auth.register(fullName, email, password)&& confirmPassword.equals(password)) {
+                    if (auth.register(fullName, email, password) && confirmPassword.equals(password)) {
                         System.out.println("You have successfully registered!");
-                    }else {
+                    } else {
                         System.out.println("Sorry email or password is incorrect!");
                     }
                     break;
@@ -49,7 +49,7 @@ public class Main {
 
                     if (auth.login(loginEmail, loginPassword)) {
                         authenticatedUser = auth.getLoggedUser();
-                        System.out.println("welcome"+authenticatedUser.getFullName());
+                        System.out.println("welcome" + authenticatedUser.getFullName());
                         do {
                             System.out.println("1- Create account ");
                             System.out.println("2- List my accounts");
@@ -65,9 +65,23 @@ public class Main {
                             System.out.println("Enter your choice: ");
                             choice = sc.nextInt();
                             sc.nextLine();
-                        } while (choice != 11);
-                    }
-                    else {
+
+                            switch (choice) {
+                                case 10:
+                                    auth.logout();
+                                    System.out.println("You have been logged out. ");
+                                    authenticatedUser = null;
+                                    break;
+                                case 11:
+                                    System.out.println("Goodbye!");
+                                    System.exit(0);
+                                    break;
+                                default:
+                                    System.out.println("invalid choice, please try again");
+                                    break;
+                            }
+                        } while (authenticatedUser != null);
+                    } else {
                         System.out.println("Sorry email or password is incorrect!");
                         System.out.println("--------------------------------------------------");
                     }
@@ -80,6 +94,6 @@ public class Main {
                     System.out.println("Invalid choice");
                     break;
             }
-        } while (choice != 3);
+        } while (true);
     }
 }
