@@ -1,17 +1,23 @@
 package org.bankManagment;
 
 
+import org.bankManagment.Domain.Account;
 import org.bankManagment.Domain.User;
+import org.bankManagment.RepositoryMemory.inMemoryAccountRepository;
 import org.bankManagment.RepositoryMemory.inMemoryUserRepository;
+import org.bankManagment.Service.AccountService;
 import org.bankManagment.Service.AuthService;
 
+import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Main {
-    public static void main() {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         AuthService auth = new AuthService(new inMemoryUserRepository());
         User authenticatedUser = null;
+        AccountService accountService = new AccountService(new inMemoryAccountRepository());
 
         int choice;
         do {
@@ -67,6 +73,20 @@ public class Main {
                             sc.nextLine();
 
                             switch (choice) {
+                                case 1:
+                                    UUID userId = authenticatedUser.getId();
+                                    if (accountService.createAccount(userId)) {
+                                        System.out.println("Congratulations! You have successfully create your account.!");
+                                    } else {
+                                        System.out.println("something went wrong!");
+                                    }
+                                    break;
+                                case 2:
+                                    UUID ownerId = authenticatedUser.getId();
+                                    List<Account> accounts = accountService.getAllAccounts(ownerId);
+                                    System.out.println("--------- List of your all accounts : ---------");
+                                    accounts.stream().forEach(System.out::println);
+                                    break;
                                 case 7:
                                     System.out.println("enter your new username:");
                                     String userName = sc.nextLine();
