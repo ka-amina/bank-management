@@ -17,4 +17,17 @@ public class inMemoryUserRepository implements UserRepository {
     public Optional<User> findByEmail(String email) {
         return Optional.ofNullable(users.get(email));
     }
+
+    @Override
+    public boolean updateProfile(User user, String userName, String email) {
+        if (!users.containsKey(user.getEmail())) {
+            return false;
+        }
+        users.remove(user.getEmail());
+        user.setFullName(userName);
+        user.setEmail(email);
+        users.put(user.getEmail(), user);
+
+        return true;
+    }
 }

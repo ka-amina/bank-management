@@ -15,9 +15,28 @@ public class User {
         this.password = password;
     }
 
-    public UUID getId() {return id;}
-    public String getFullName(){return fullName;}
-    public String getEmail(){return email;}
-    public String getPassword(){return password;}
+    public UUID getId() {
+        return id;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setFullName(String userName) {
+        this.fullName = userName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
 }

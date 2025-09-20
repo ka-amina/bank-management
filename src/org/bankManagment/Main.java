@@ -67,6 +67,17 @@ public class Main {
                             sc.nextLine();
 
                             switch (choice) {
+                                case 7:
+                                    System.out.println("enter your new username:");
+                                    String userName = sc.nextLine();
+                                    System.out.println("enter your new email:");
+                                    String newEmail = sc.nextLine();
+                                    if (auth.updateProfil(userName, newEmail)) {
+                                        System.out.println("You have successfully update your account!");
+                                    } else {
+                                        System.out.println("Sorry something went wrong, please try again!");
+                                    }
+
                                 case 10:
                                     auth.logout();
                                     System.out.println("You have been logged out. ");
