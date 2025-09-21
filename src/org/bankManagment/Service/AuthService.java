@@ -43,4 +43,15 @@ public class AuthService {
         userRepository.updateProfile(loggedUser, userName, email);
         return true;
     }
+
+    public boolean changePassword(String newPassword) {
+        User user = getLoggedUser();
+        if (user != null) {
+            user.setPassword(newPassword);
+            userRepository.changePassword(user, newPassword);
+            return true;
+        }
+        return false;
+    }
+
 }

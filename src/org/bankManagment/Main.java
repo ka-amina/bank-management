@@ -145,7 +145,15 @@ public class Main {
                                     } else {
                                         System.out.println("Sorry something went wrong, please try again!");
                                     }
-
+                                case 8:
+                                    System.out.println("Enter Your new password:");
+                                    String newPassword = sc.nextLine();
+                                    if(auth.changePassword(newPassword)) {
+                                        System.out.println("You have successfully changed your password!");
+                                    }else{
+                                        System.out.println("Sorry something went wrong, please try again!");
+                                    }
+                                    break;
                                 case 10:
                                     auth.logout();
                                     System.out.println("You have been logged out. ");

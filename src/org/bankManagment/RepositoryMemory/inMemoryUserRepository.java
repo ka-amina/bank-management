@@ -30,4 +30,15 @@ public class inMemoryUserRepository implements UserRepository {
 
         return true;
     }
+
+    @Override
+    public boolean changePassword(User user, String newPassword) {
+        if (user != null && users.containsKey(user.getEmail())) {
+            user.setPassword(newPassword);
+            users.put(user.getEmail(), user);
+            return true;
+        }
+        return false;
+    }
+
 }
