@@ -2,6 +2,7 @@ package org.bankManagment;
 
 
 import org.bankManagment.Domain.Account;
+import org.bankManagment.Domain.Transaction;
 import org.bankManagment.Domain.User;
 import org.bankManagment.RepositoryMemory.inMemoryAccountRepository;
 import org.bankManagment.RepositoryMemory.inMemoryTransactionRepository;
@@ -128,6 +129,11 @@ public class Main {
                                     }else {
                                         System.out.println("Sorry something went wrong, please try again");
                                     }
+                                    break;
+                                case 6:
+                                    System.out.println("----------------Your Transactions history-----------------");
+                                    List<Transaction> transactions= transactionService.getAllTransactions(authenticatedUser.getId());
+                                    transactions.forEach(System.out::println);
                                     break;
                                 case 7:
                                     System.out.println("enter your new username:");
