@@ -1,7 +1,6 @@
 package org.bankManagment.Domain;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -20,25 +19,33 @@ public class Account {
         this.createdAt = LocalDateTime.now();
     }
 
-    public UUID getUserId(){
+    public UUID getUserId() {
         return this.userId;
     }
 
-    public String getAccountId(){
+    public String getAccountId() {
         return this.accountId;
     }
 
-    public boolean getStatus(){
+    public boolean getStatus() {
         return this.isActive;
     }
 
-    public BigDecimal getBalance(){
+    public BigDecimal getBalance() {
         return this.balance;
+    }
+
+    public void disposit(BigDecimal amount) {
+        this.balance = this.balance.add(amount);
+    }
+
+    public void withdraw(BigDecimal amount) {
+        this.balance = this.balance.subtract(amount);
     }
 
 
     @Override
     public String toString() {
-        return "{accountId= " + accountId + ", userId=" + userId + ", balance=" + balance + ", createdAt=" + createdAt + ", isActive=" + isActive + "}";
+        return "{accountId= " + accountId + ", userId=" + userId + ", balance=" + balance + ", createdAt=" + createdAt + ", isActive=" + (isActive ? "Active" : "Not active") + "}";
     }
 }

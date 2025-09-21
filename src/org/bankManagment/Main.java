@@ -4,10 +4,13 @@ package org.bankManagment;
 import org.bankManagment.Domain.Account;
 import org.bankManagment.Domain.User;
 import org.bankManagment.RepositoryMemory.inMemoryAccountRepository;
+import org.bankManagment.RepositoryMemory.inMemoryTransactionRepository;
 import org.bankManagment.RepositoryMemory.inMemoryUserRepository;
 import org.bankManagment.Service.AccountService;
 import org.bankManagment.Service.AuthService;
+import org.bankManagment.Service.TransactionService;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
@@ -18,6 +21,7 @@ public class Main {
         AuthService auth = new AuthService(new inMemoryUserRepository());
         User authenticatedUser = null;
         AccountService accountService = new AccountService(new inMemoryAccountRepository());
+        TransactionService transactionService = new TransactionService(new inMemoryTransactionRepository());
 
         int choice;
         do {
@@ -32,7 +36,6 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    System.out.println("Enter your full name: ");
                     System.out.println("Full name: ");
                     String fullName = sc.nextLine();
                     System.out.println("Email: ");
@@ -86,6 +89,45 @@ public class Main {
                                     List<Account> accounts = accountService.getAllAccounts(ownerId);
                                     System.out.println("--------- List of your all accounts : ---------");
                                     accounts.stream().forEach(System.out::println);
+                                    break;
+                                case 3:
+                                    List<Account> dispositAccounts = accountService.getAllAccounts(authenticatedUser.getId());
+                                    System.out.println("------- list of your accounts----------");
+                                    dispositAccounts.forEach(System.out::println);
+
+                                    System.out.println("Enter your account ID : ");
+                                    String despositAccountId = sc.nextLine();
+
+                                    System.out.println("Enter the amount you want to withdraw : ");
+                                    BigDecimal dispositAmount = sc.nextBigDecimal();
+
+                                    if (accountService.desposit(despositAccountId, dispositAmount)) {
+                                        UUID owner = authenticatedUser.getId();
+                                        transactionService.addDesposit(owner, despositAccountId, dispositAmount);
+                                        System.out.println("You have successfully deposited your account.");
+                                    }else{
+                                        System.out.println("something went wrong!");
+                                    }
+
+                                    break;
+                                case 4:
+                                    List<Account> withdrawAccounts = accountService.getAllAccounts(authenticatedUser.getId());
+                                    System.out.println("------- list of your accounts----------");
+                                    withdrawAccounts.forEach(System.out::println);
+
+                                    System.out.println("Enter your account ID : ");
+                                    String accountId = sc.nextLine();
+
+                                    System.out.println("Enter the amount you want to withdraw : ");
+                                    BigDecimal amount = sc.nextBigDecimal();
+
+                                    if (accountService.withdraw(accountId, amount)) {
+                                        UUID owner = authenticatedUser.getId();
+                                        transactionService.addWithdraw(owner, accountId, amount);
+                                        System.out.println("The amount has been withdrawn");
+                                    }else {
+                                        System.out.println("Sorry something went wrong, please try again");
+                                    }
                                     break;
                                 case 7:
                                     System.out.println("enter your new username:");

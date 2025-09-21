@@ -3,6 +3,7 @@ package org.bankManagment.Service;
 import org.bankManagment.Domain.Account;
 import org.bankManagment.Repository.AccountRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -35,6 +36,14 @@ public class AccountService {
 
     public List<Account> getAllAccounts(UUID userId){
         return accountRepository.getAllAccounts(userId);
+    }
+
+    public boolean withdraw(String accountId, BigDecimal amount){
+        return accountRepository.withdraw(accountId, amount);
+    }
+
+    public boolean desposit(String accountId, BigDecimal amount){
+        return accountRepository.desposit(accountId, amount);
     }
 
 }
